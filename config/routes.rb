@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   get 'scrape/index'
+  get 'scrape', to: 'scrape#index'
+  get 'scrape/test'
 
   root 'index#index'
 

@@ -1,3 +1,3 @@
-#wrapper
-  .alert.alert-success
-    %p ok
+= bootstrap_form_tag url: '/scrape/go', method: :GET do |f|
+  = f.text_field :user, hide_label: true, placeholder: 'Username'
+  = f.primary 'Go'

@@ -1,0 +1,8 @@
+#wrapper
+  .progress
+    .progress-bar{:role => 'progressbar',
+                  'aria-valuenow' => @progress[:current],
+                  'aria-valuemin' => 0,
+                  'aria-valuemax' => @progress[:total],
+                  :style => 'width: 60%; background-color: green;'}
+      test

@@ -25,7 +25,11 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'spring',        group: :development
 
 # Bootstrap
+gem 'therubyracer'
+gem 'less-rails'
 gem 'twitter-bootstrap-rails'
+gem 'bootstrap_form'
+
 
 # Mongoid
 gem 'mongoid', '~> 4.0.0.beta1', github: 'mongoid/mongoid'
