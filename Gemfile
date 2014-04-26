@@ -30,7 +30,7 @@ gem 'spring',        group: :development
 gem 'twitter-bootstrap-rails'
 
 # Mongoid
-gem 'mongoid'
+gem 'mongoid', '~> 4.0.0.beta1', github: 'mongoid/mongoid'
 
 # Haml
 gem 'haml'
