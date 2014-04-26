@@ -15,3 +15,11 @@
 //= require twitter/bootstrap
 //= require turbolinks
 //= require_tree .
+
+// Add useful function for extracting get parameters
+(function($){
+    $.getUrlVar = function(key){
+        var result = new RegExp(key + "=([^&]*)", "i").exec(window.location.search);
+        return result && unescape(result[1]) || "";
+    };
+})(jQuery);

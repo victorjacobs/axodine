@@ -3,12 +3,13 @@ class ScrapeController < ApplicationController
     
   end
 
+  # Gets called from javascript
   def go
     current_user = params['user']
     current_page = params['step'].nil? ? 1 : params['step']
 
     if current_user.nil?
-      redirect_to :action => 'index'
+      render plain: -1
       return
     end
 
@@ -16,7 +17,7 @@ class ScrapeController < ApplicationController
     @progress = ((current_page.to_f / scraper.total_pages) * 100).to_i
 
     if @progress >= 100
-      redirect_to :action => 'success'
+      render plain: @progress
       return
     end
 
@@ -31,10 +32,16 @@ class ScrapeController < ApplicationController
       end
     end
 
-    redirect_to :action => 'go', :step => current_page.to_i + 1, :user => current_user
+    render plain: @progress
   end
 
-  def success
+  def test
 
+  end
+
+  def sl
+    sleep(3)
+
+    render plain: 42
   end
 end

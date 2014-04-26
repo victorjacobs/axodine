@@ -1,3 +1,10 @@
-= bootstrap_form_tag url: '/scrape/go', method: :GET do |f|
-  = f.text_field :user, hide_label: true, placeholder: 'Username'
-  = f.primary 'Go'
+%p
+  Hang on, scraping your last.fm profile...
+
+.progress.progress-striped
+  .progress.bar.active#scrape-progress{:role => 'progressbar',
+                  'aria-valuenow'.to_sym => @progress,
+                  'aria-valuemin'.to_sym => 0,
+                  'aria-valuemax'.to_sym => 100,
+                  :style => "width: #{ @progress }%;"}
+    %span#indicator
