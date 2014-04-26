@@ -1,8 +1,8 @@
-#wrapper
-  .progress
-    .progress-bar{:role => 'progressbar',
-                  'aria-valuenow' => @progress[:current],
+.progress.progress-striped
+  .progress.bar.active{:role => 'progressbar',
+                  'aria-valuenow' => @progress,
                   'aria-valuemin' => 0,
-                  'aria-valuemax' => @progress[:total],
-                  :style => 'width: 60%; background-color: green;'}
+                  'aria-valuemax' => 100,
+                  :style => "width: #{ @progress }%;"}
+    %span.sr-only
       test

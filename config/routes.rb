@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   get 'scrape/index'
   get 'scrape', to: 'scrape#index'
   get 'scrape/test'
+  get 'scrape/go'
 
   root 'index#index'
 

@@ -4,17 +4,23 @@ class ScrapeController < ApplicationController
   end
 
   def go
-    @status = 'running'
-
     current_user = params['user']
+    current_page = params['step'].nil? ? 1 : params['step']
 
     if current_user.nil?
-      redirect_to 'index'
+      redirect_to :action => 'index'
+      return
     end
 
     scraper = LastfmHelper::Scraper.new(current_user)
+    @progress = ((current_page.to_f / scraper.total_pages) * 100).to_i
 
-    scraper.get_tracks(1).each do |tr|
+    if @progress >= 100
+      redirect_to :action => 'success'
+      return
+    end
+
+    scraper.get_tracks(current_page).each do |tr|
       # Skip currently playing item
       next if tr['date'].nil?
 
@@ -23,14 +29,12 @@ class ScrapeController < ApplicationController
       rescue
         # Duplicate, just skip
       end
-
-      @status = 'ended'
     end
+
+    redirect_to :action => 'go', :step => current_page.to_i + 1, :user => current_user
   end
 
-  def test
-    @progress = Hash.new
-    @progress[:total] = 10
-    @progress[:current] = 2
+  def success
+
   end
 end

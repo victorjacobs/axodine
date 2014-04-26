@@ -5,7 +5,7 @@ module LastfmHelper
     attr_accessor :total_tracks, :total_pages
 
     def initialize(user)
-      tracks_per_page = 10
+      tracks_per_page = Settings.scrape_step
 
       @url = 'http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks'
       @url += "&user=#{ user }"
@@ -23,7 +23,10 @@ module LastfmHelper
     end
 
     def get_tracks(page)
-      JSON.load(open(@url))['recenttracks']['track']
+      # Add page
+      local_url = @url + "&page=#{ page }"
+
+      JSON.load(open(local_url))['recenttracks']['track']
     end
   end
 end
