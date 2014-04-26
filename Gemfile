@@ -29,6 +29,14 @@ gem 'spring',        group: :development
 # Bootstrap
 gem 'twitter-bootstrap-rails'
 
+# Mongoid
+gem 'mongoid'
+
+# Haml
+gem 'haml'
+
+gem 'rails_config'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
