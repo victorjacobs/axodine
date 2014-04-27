@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   # Visualisation
   get 'view/:user', to: 'data#view'
   get 'data/playsperday', to: 'data#plays_per_day'
+  get 'data/playspermonth', to: 'data#plays_per_month'
 
   root 'index#index'
 
