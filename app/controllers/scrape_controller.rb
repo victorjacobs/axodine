@@ -6,14 +6,23 @@ class ScrapeController < ApplicationController
   # Gets called from javascript
   def go
     current_user = params['user']
-    current_page = params['step'].nil? ? 1 : params['step']
 
     if current_user.nil?
       render plain: -1
       return
     end
 
+    # See whether scrape was already started earlier
+    stored_progress = ScrapeProgress.where(user: current_user)
+
+    current_page = (stored_progress.exists?) ? stored_progress.first.to : 1
+
     scraper = LastfmHelper::Scraper.new(current_user)
+    if !scraper.error.nil?
+      render plain: scraper.error
+      return
+    end
+
     @progress = ((current_page.to_f / scraper.total_pages) * 100).to_i
 
     if @progress >= 100
@@ -32,11 +41,14 @@ class ScrapeController < ApplicationController
       end
     end
 
+    # Delete progress and store new
+    if stored_progress.exists?
+      stored_progress.delete
+    end
+
+    ScrapeProgress.create(user: current_user, to: current_page + 1)
+
     render plain: @progress
-  end
-
-  def test
-
   end
 
   def sl

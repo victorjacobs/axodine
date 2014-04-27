@@ -2,7 +2,7 @@ require 'open-uri'
 
 module LastfmHelper
   class Scraper
-    attr_accessor :total_tracks, :total_pages
+    attr_accessor :total_tracks, :total_pages, :error
 
     def initialize(user)
       tracks_per_page = Settings.scrape_step
@@ -12,21 +12,32 @@ module LastfmHelper
       @url += "&api_key=#{ Settings.lastfm_key }"
       @url += '&format=json'
 
+      # Load metadata
+      meta_data = JSON.load(open(@url + '&limit=1'))
+
       # Get some meta data from @attr
-      attr = JSON.load(open(@url + '&limit=1'))['recenttracks']['@attr']
-      @total_tracks = attr['total'].to_i
+      begin
+        attr = meta_data['recenttracks']['@attr']
+        @total_tracks = attr['total'].to_i
 
-      @total_pages = (@total_tracks.to_f / tracks_per_page).round
+        @total_pages = (@total_tracks.to_f / tracks_per_page).ceil
 
-      # Append tracks limit
-      @url += '&limit=' + tracks_per_page.to_s
+        # Append tracks limit
+        @url += '&limit=' + tracks_per_page.to_s
+      rescue
+        @error = meta_data['message']
+      end
     end
 
     def get_tracks(page)
-      # Add page
-      local_url = @url + "&page=#{ page }"
+      if @error.nil?
+        # Add page
+        local_url = @url + "&page=#{ page }"
 
-      JSON.load(open(local_url))['recenttracks']['track']
+        JSON.load(open(local_url))['recenttracks']['track']
+      else
+        false
+      end
     end
   end
 end
