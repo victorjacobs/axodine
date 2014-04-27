@@ -30,7 +30,6 @@ gem 'less-rails'
 gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
 gem 'bootstrap_form'
 
-
 # Mongoid
 gem 'mongoid', '~> 4.0.0.beta1', github: 'mongoid/mongoid'
 
@@ -38,6 +37,8 @@ gem 'mongoid', '~> 4.0.0.beta1', github: 'mongoid/mongoid'
 gem 'haml'
 
 gem 'rails_config'
+
+gem 'd3js-rails'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

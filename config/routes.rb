@@ -3,7 +3,10 @@ Rails.application.routes.draw do
   get 'scrape', to: 'scrape#index'
   get 'scrape/go'
   get 'scrape/sl'
-  get 'scrape/test'
+
+  # Visualisation
+  get 'view/:user', to: 'data#view'
+  get 'data/playsperday', to: 'data#plays_per_day'
 
   root 'index#index'
 

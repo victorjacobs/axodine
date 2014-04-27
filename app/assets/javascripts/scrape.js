@@ -11,7 +11,6 @@
             return;
 
         var URL = "/scrape/go?user=" + user;
-        //var URL = "/scrape/sl?user=vikking";
 
         var callback = function (data) {
             if (isNaN(data)) {
@@ -20,13 +19,13 @@
                 return;
             }
 
-            if (parseInt(data) >= 100) {
-                alert("done");
-                return;
-            }
-
             $("#scrape-progress").css("width", data + "%");
             $("#indicator").html(data + "%");
+
+            if (parseInt(data) >= 100) {
+                $("#message").html('<div class="alert alert-success">Scrape succesful</div>');
+                return;
+            }
 
             $.get(URL , callback);
         };
