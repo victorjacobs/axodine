@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   get 'scrape/sl'
 
   # Visualisation
-  get 'view/:user', to: 'data#view'
+  get 'view/:user', to: 'view#index'
   get 'data/playsperday', to: 'data#plays_per_day'
   get 'data/playspermonth', to: 'data#plays_per_month'
 

@@ -1,8 +1,4 @@
 class DataController < ApplicationController
-  def view
-    render :layout => 'application' # No idea why this is needed
-  end
-
   # Plays per week day
   def plays_per_day
     map = %Q{ function () { emit(this.ti.getDay(), 1); } }

@@ -14,7 +14,6 @@
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require turbolinks
-//= require_tree .
 
 // Add useful function for extracting get parameters
 (function($){
