@@ -7,7 +7,8 @@ class Play
   field :a, as: :artist, type: String
   field :ti, as: :time, type: DateTime
 
-  index({ user: 1, ti: 1 })
+  index({ user: 1})
+  index({ ti: 1 })
 
   def self.generate_id(u, t, a, ti)
     Digest::MD5.hexdigest(u + t + a + ti)

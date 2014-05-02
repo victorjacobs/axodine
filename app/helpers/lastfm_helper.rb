@@ -34,7 +34,7 @@ module LastfmHelper
         # Add page
         local_url = @url + "&page=#{ page }"
 
-        JSON.load(open(local_url))['recenttracks']['track']
+        JSON.load(open(local_url))['recenttracks']['track'].delete_if { |tr| tr['date'].nil? }
       else
         false
       end

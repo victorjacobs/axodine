@@ -13,9 +13,17 @@ class ScrapeController < ApplicationController
     end
 
     # See whether scrape was already started earlier
-    stored_progress = ScrapeProgress.where(user: current_user)
+    user = User.where(name: current_user)
 
-    current_page = (stored_progress.exists?) ? stored_progress.first.to : 1
+    if !user.exists?
+      User.create(name: current_user, progress: 1)
+      current_page = 1
+    elsif user.first.progress != -1
+      current_page = user.first.progress
+    else
+      render plain: 100
+      return
+    end
 
     scraper = LastfmHelper::Scraper.new(current_user)
     if !scraper.error.nil?
@@ -26,14 +34,24 @@ class ScrapeController < ApplicationController
     @progress = ((current_page.to_f / scraper.total_pages) * 100).to_i
 
     if @progress >= 100
+      user.first.update_attributes(
+          progress: -1
+      )
+
       render plain: @progress
       return
     end
 
-    scraper.get_tracks(current_page).each do |tr|
-      # Skip currently playing item
-      next if tr['date'].nil?
+    tracks = scraper.get_tracks(current_page)
 
+    # Store timestamp last play if initial scrape
+    if current_page == 1
+      user.first.update_attributes(
+          last_play: tracks.first['date']['#text']
+      )
+    end
+
+    tracks.each do |tr|
       begin
         Play.create(user: current_user, title: tr['name'], artist: tr['artist']['#text'], time: tr['date']['#text'])
       rescue
@@ -41,12 +59,9 @@ class ScrapeController < ApplicationController
       end
     end
 
-    # Delete progress and store new
-    if stored_progress.exists?
-      stored_progress.delete
-    end
-
-    ScrapeProgress.create(user: current_user, to: current_page + 1)
+    user.first.update_attributes(
+        progress: current_page + 1
+    )
 
     render plain: @progress
   end

@@ -2,9 +2,9 @@
 
 (function() {
     $(document).ready(function() {
-        //var user = $.getUrlVar('user');
+        var user = window.location.pathname.split('/view/')[1];
 
-        $.get("/data/playsperday?user=steniaz", function (data) {
+        $.get("/data/playsperday?user=" + user, function (data) {
             var ctx = $("#chart-per-day").get(0).getContext("2d");
 
             var labels = [];
@@ -23,7 +23,7 @@
             new Chart(ctx).Bar(plotData, {datasetFill: false});
         });
 
-        $.get("/data/playspermonth?user=steniaz", function (data) {
+        $.get("/data/playspermonth?user="  + user, function (data) {
             var ctx = $("#chart-per-month").get(0).getContext("2d");
 
             var monthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
