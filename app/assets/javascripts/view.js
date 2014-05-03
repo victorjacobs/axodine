@@ -1,66 +1,35 @@
 //= require chart.min
+//= require plot
 
 (function() {
     $(document).ready(function() {
         var user = window.location.pathname.split('/view/')[1];
 
-        $.get("/data/playsperday?user=" + user, function (data) {
-            var ctx = $("#chart-per-day").get(0).getContext("2d");
-
-            var labels = [];
-            var dataSet = [];
-
-            data.data.forEach(function (el) {
-                labels.push(intToDay(el.day));
-                dataSet.push(el.count);
-            });
-
-            var plotData = {
-                labels: labels,
-                datasets: [{data: dataSet}]
-            };
-
-            new Chart(ctx).Bar(plotData, {datasetFill: false});
+        $.get("/data/" + user +  "/playsperday", function (data) {
+            Plot.barPerDay("#chart-per-day", data);
         });
 
-        $.get("/data/playspermonth?user="  + user, function (data) {
-            var ctx = $("#chart-per-month").get(0).getContext("2d");
+        $.get("/data/" + user +  "/playspermonth", function (data) {
+            Plot.linePerMonth("#chart-per-month", data);
+        });
 
-            var monthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+        $("#artist").focus(function() {
+            $("#artist").val("");
+        });
 
-            var labels = [];
-            var dataSet = [];
+        $("#artist").keydown(function (ev) {
+            if (ev.which != 13) return;
+            ev.preventDefault();
 
-            var ticker = 0;
-            data.data.forEach(function (el) {
-                var date = new Date(el.month);
-                var label = (ticker % 2 == 0) ? monthNames[date.getMonth()] + " " + date.getFullYear() : "";
+            var artist = $("#artist").val();
+            $("#artist").blur();
 
-                labels.push(label);
-                dataSet.push(el.count);
-
-                ticker++;
+            // Plot data
+            $.get("/data/" + user +  "/artist/" + artist + "/playspermonth", function (data) {
+                $("#chart-artist").show();
+                Plot.linePerMonth("#chart-artist", data);
             });
-
-            var plotData = {
-                labels: labels,
-                datasets: [{data: dataSet}]
-            };
-
-            new Chart(ctx).Line(plotData, {datasetFill: false});
         });
     });
 
-
-    var intToDay = function(num) {
-        switch(parseInt(num)) {
-            case 0: return "Sunday";
-            case 1: return "Monday";
-            case 2: return "Tuesday";
-            case 3: return "Wednesday";
-            case 4: return "Thursday";
-            case 5: return "Friday";
-            case 6: return "Saturday";
-        }
-    };
 })();

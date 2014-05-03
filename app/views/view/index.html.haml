@@ -1,13 +1,11 @@
-%p test
-
-%p= @user
-
+%h2 Plays per month
 %canvas#chart-per-month{:width => 1000, :height => 400}
 
+%h2 Plays per day
 %canvas#chart-per-day{:width => 1000, :height => 200}
 
-.row
-  .span-6
-    #chart-1
-  .span-6
-    #chart-2
+%h2 Plays per artist
+= bootstrap_form_tag url: '#', method: :GET do |f|
+  = f.text_field :artist, hide_label: true, placeholder: 'Artist name'
+
+%canvas#chart-artist{:width => 1000, :height => 400, :style => 'display: none;'}

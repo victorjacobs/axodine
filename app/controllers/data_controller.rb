@@ -1,4 +1,7 @@
 class DataController < ApplicationController
+  # TODO refactor (code duplication)
+  # TODO make more defensive
+
   # Plays per week day
   def plays_per_day
     map = %Q{ function () { emit(this.ti.getDay(), 1); } }
@@ -25,6 +28,28 @@ class DataController < ApplicationController
     reduce = %Q{ function(key, values) { return Array.sum(values); } }
 
     query = Play.where(user: params[:user]).map_reduce(map, reduce).out(inline: true)
+
+    per_month = Hash.new
+    # Store some metadata
+    per_month[:total] = query.count
+    max = 0
+
+    per_month[:data] = Array.new
+    query.each do |value|
+      max = (value['value'].to_i > max) ? value['value'].to_i : max
+      per_month[:data] << { :month => value['_id'], :count => value['value'].to_i }
+    end
+
+    per_month[:max] = max
+
+    render json: per_month
+  end
+
+  def plays_per_month_artist
+    map = %Q{ function() { emit(new Date(Date.UTC(this.ti.getFullYear(), this.ti.getMonth(), 1)), 1) } }
+    reduce = %Q{ function(key, values) { return Array.sum(values); } }
+
+    query = Play.where(user: params[:user], artist: params[:artist]).map_reduce(map, reduce).out(inline: true)
 
     per_month = Hash.new
     # Store some metadata

@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  root 'index#index'
+
   get 'scrape/index'
   get 'scrape', to: 'scrape#index'
   get 'scrape/go'
@@ -6,10 +8,12 @@ Rails.application.routes.draw do
 
   # Visualisation
   get 'view/:user', to: 'view#index'
-  get 'data/playsperday', to: 'data#plays_per_day'
-  get 'data/playspermonth', to: 'data#plays_per_month'
 
-  root 'index#index'
+  # Data API
+  get 'data/:user/playsperday', to: 'data#plays_per_day'
+  get 'data/:user/playspermonth', to: 'data#plays_per_month'
+
+  get 'data/:user/artist/:artist/playspermonth', to: 'data#plays_per_month_artist'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
